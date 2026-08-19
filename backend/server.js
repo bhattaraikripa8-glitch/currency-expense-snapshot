@@ -51,6 +51,25 @@ app.post("/expenses", (req, res) => {
   res.status(201).json(newExpense);
 });
 
+app.delete("/expenses/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  const expenseIndex = expenses.findIndex((expense) => expense.id === id);
+
+  if (expenseIndex === -1) {
+    return res.status(404).json({
+      message: "Expense not found",
+    });
+  }
+
+  const deletedExpense = expenses.splice(expenseIndex, 1);
+
+  res.json({
+    message: "Expense deleted successfully",
+    expense: deletedExpense[0],
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
