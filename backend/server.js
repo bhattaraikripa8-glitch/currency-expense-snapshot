@@ -1,6 +1,7 @@
 const express = require("express");
 
 const expenseRoutes = require("./routes/expenses");
+const convertRoutes = require("./routes/convert");
 
 const app = express();
 const PORT = 5000;
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/expenses", expenseRoutes);
+app.use("/convert", convertRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
