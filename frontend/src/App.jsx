@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
+import ExpenseList from "./components/ExpenseList";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -23,14 +24,16 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Currency & Expense Snapshot</h1>
+  <div>
+    <h1>Currency & Expense Snapshot</h1>
 
-      <ExpenseForm onExpenseAdded={handleExpenseAdded} />
+    <ExpenseForm onExpenseAdded={handleExpenseAdded} />
 
-      <p>Number of expenses: {expenses.length}</p>
-    </div>
-  );
+    <p>Number of expenses: {expenses.length}</p>
+
+    <ExpenseList expenses={expenses} />
+  </div>
+);
 }
 
 export default App;
