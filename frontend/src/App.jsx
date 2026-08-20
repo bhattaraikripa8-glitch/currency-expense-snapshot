@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
+import HomeCurrencySelector from "./components/HomeCurrencySelector";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
+  const [homeCurrency, setHomeCurrency] = useState("NPR");
 
   useEffect(() => {
     fetch("/expenses")
@@ -46,6 +48,9 @@ function App() {
   return (
   <div>
     <h1>Currency & Expense Snapshot</h1>
+    <HomeCurrencySelector
+    homeCurrency={homeCurrency}
+    onChange={setHomeCurrency}/>
 
     <ExpenseForm onExpenseAdded={handleExpenseAdded} />
 
