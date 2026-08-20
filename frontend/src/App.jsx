@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ExpenseForm from "./components/ExpenseForm";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -14,9 +15,18 @@ function App() {
       });
   }, []);
 
+  const handleExpenseAdded = (newExpense) => {
+    setExpenses((currentExpenses) => [
+      ...currentExpenses,
+      newExpense,
+    ]);
+  };
+
   return (
     <div>
       <h1>Currency & Expense Snapshot</h1>
+
+      <ExpenseForm onExpenseAdded={handleExpenseAdded} />
 
       <p>Number of expenses: {expenses.length}</p>
     </div>
