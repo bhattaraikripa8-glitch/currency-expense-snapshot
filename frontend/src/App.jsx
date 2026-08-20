@@ -23,6 +23,26 @@ function App() {
     ]);
   };
 
+  const handleDelete = async (id) => {
+  try {
+    const response = await fetch(`/expenses/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to delete expense");
+    }
+
+    setExpenses((currentExpenses) =>
+      currentExpenses.filter((expense) => expense.id !== id)
+    );
+  } catch (error) {
+    console.error("Failed to delete expense:", error);
+  }
+};
+
   return (
   <div>
     <h1>Currency & Expense Snapshot</h1>
@@ -31,7 +51,9 @@ function App() {
 
     <p>Number of expenses: {expenses.length}</p>
 
-    <ExpenseList expenses={expenses} />
+    <ExpenseList 
+    expenses={expenses} 
+    onDelete={handleDelete}/>
   </div>
 );
 }

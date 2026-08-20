@@ -1,4 +1,4 @@
-function ExpenseList({ expenses }) {
+function ExpenseList({ expenses, onDelete }) {
   if (expenses.length === 0) {
     return <p>No expenses added yet.</p>;
   }
@@ -18,6 +18,10 @@ function ExpenseList({ expenses }) {
           <p>
             {new Date(expense.date).toLocaleDateString()}
           </p>
+
+          <button onClick={() => onDelete(expense.id)}>
+            Delete
+          </button>
         </div>
       ))}
     </div>
