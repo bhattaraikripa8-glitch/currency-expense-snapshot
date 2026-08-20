@@ -1,4 +1,9 @@
-function ExpenseList({ expenses, onDelete }) {
+function ExpenseList({
+  expenses,
+  conversions,
+  homeCurrency,
+  onDelete,
+}) {
   if (expenses.length === 0) {
     return <p>No expenses added yet.</p>;
   }
@@ -7,23 +12,48 @@ function ExpenseList({ expenses, onDelete }) {
     <div>
       <h2>Expenses</h2>
 
-      {expenses.map((expense) => (
-        <div key={expense.id}>
-          <h3>{expense.title}</h3>
+      {expenses.map((expense) => {
+        const conversion = conversions[expense.id];
 
-          <p>
-            {expense.amount} {expense.currency}
-          </p>
+        return (
+          <div key={expense.id}>
+            <h3>{expense.title}</h3>
 
-          <p>
-            {new Date(expense.date).toLocaleDateString()}
-          </p>
+            <p>
+              {expense.amount} {expense.currency}
+            </p>
 
-          <button onClick={() => onDelete(expense.id)}>
-            Delete
-          </button>
-        </div>
-      ))}
+            {conversion?.loading && (
+              <p>Converting...</p>
+            )}
+
+            {!conversion?.loading &&
+              conversion?.error && (
+                <p>Conversion unavailable</p>
+              )}
+
+            {!conversion?.loading &&
+              !conversion?.error &&
+              conversion && (
+                <p>
+                  ≈ {conversion.amount} {homeCurrency}
+                </p>
+              )}
+
+            <p>
+              {new Date(
+                expense.date
+              ).toLocaleDateString()}
+            </p>
+
+            <button
+              onClick={() => onDelete(expense.id)}
+            >
+              Delete
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }

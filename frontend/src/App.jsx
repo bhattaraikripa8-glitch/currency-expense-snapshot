@@ -6,6 +6,7 @@ import HomeCurrencySelector from "./components/HomeCurrencySelector";
 function App() {
   const [expenses, setExpenses] = useState([]);
   const [homeCurrency, setHomeCurrency] = useState("NPR");
+  const [conversions, setConversions] = useState({});
 
   useEffect(() => {
     fetch("/expenses")
@@ -17,6 +18,67 @@ function App() {
         console.error("Failed to fetch expenses:", error);
       });
   }, []);
+
+  useEffect(() => {
+  if (expenses.length === 0) {
+    setConversions({});
+    return;
+  }
+
+  const convertExpenses = async () => {
+    const loadingState = {};
+
+    expenses.forEach((expense) => {
+      loadingState[expense.id] = {
+        loading: true,
+        amount: null,
+        error: "",
+      };
+    });
+
+    setConversions(loadingState);
+
+    const results = await Promise.all(
+      expenses.map(async (expense) => {
+        try {
+          const response = await fetch(
+            `/convert?from=${expense.currency}&to=${homeCurrency}&amount=${expense.amount}`
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(
+              data.message || "Failed to convert currency"
+            );
+          }
+
+          return [
+            expense.id,
+            {
+              loading: false,
+              amount: data.convertedAmount,
+              error: "",
+            },
+          ];
+        } catch (error) {
+          return [
+            expense.id,
+            {
+              loading: false,
+              amount: null,
+              error: error.message,
+            },
+          ];
+        }
+      })
+    );
+
+    setConversions(Object.fromEntries(results));
+  };
+
+  convertExpenses();
+}, [expenses, homeCurrency]);
 
   const handleExpenseAdded = (newExpense) => {
     setExpenses((currentExpenses) => [
@@ -56,8 +118,10 @@ function App() {
 
     <p>Number of expenses: {expenses.length}</p>
 
-    <ExpenseList 
-    expenses={expenses} 
+    <ExpenseList
+    expenses={expenses}
+    conversions={conversions}
+    homeCurrency={homeCurrency}
     onDelete={handleDelete}/>
   </div>
 );
