@@ -8,16 +8,33 @@ function App() {
   const [homeCurrency, setHomeCurrency] = useState("NPR");
   const [conversions, setConversions] = useState({});
 
+  const [expensesLoading, setExpensesLoading] = useState(true);
+  const [pageError, setPageError] = useState("");
+  const [deleteError, setDeleteError] = useState("");
+
   useEffect(() => {
-    fetch("/expenses")
-      .then((response) => response.json())
-      .then((data) => {
-        setExpenses(data);
-      })
-      .catch((error) => {
-        console.error("Failed to fetch expenses:", error);
-      });
-  }, []);
+  const loadExpenses = async () => {
+    setExpensesLoading(true);
+    setPageError("");
+
+    try {
+      const response = await fetch("/expenses");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to load expenses");
+      }
+
+      setExpenses(data);
+    } catch (error) {
+      setPageError(error.message);
+    } finally {
+      setExpensesLoading(false);
+    }
+  };
+
+  loadExpenses();
+}, []);
 
   useEffect(() => {
   if (expenses.length === 0) {
@@ -88,6 +105,7 @@ function App() {
   };
 
   const handleDelete = async (id) => {
+    setDeleteError("");
   try {
     const response = await fetch(`/expenses/${id}`, {
       method: "DELETE",
@@ -103,7 +121,7 @@ function App() {
       currentExpenses.filter((expense) => expense.id !== id)
     );
   } catch (error) {
-    console.error("Failed to delete expense:", error);
+     setDeleteError(error.message);
   }
 };
 
@@ -122,6 +140,14 @@ const total = expenses.reduce((sum, expense) => {
   return sum;
 }, 0);
 
+const totalLoading = expenses.some(
+  (expense) => conversions[expense.id]?.loading
+);
+
+const totalHasError = expenses.some(
+  (expense) => conversions[expense.id]?.error
+);
+
   return (
   <div>
     <h1>Currency & Expense Snapshot</h1>
@@ -130,21 +156,38 @@ const total = expenses.reduce((sum, expense) => {
     onChange={setHomeCurrency}/>
 
     <div>
+  <div>
   <h2>Total Expenses</h2>
-  <p>
-    {total.toFixed(2)} {homeCurrency}
-  </p>
-</div>
 
+  {totalLoading ? (
+    <p>Calculating total...</p>
+  ) : totalHasError ? (
+    <p>Total unavailable because a conversion failed.</p>
+  ) : (
+    <p>
+      {total.toFixed(2)} {homeCurrency}
+    </p>
+  )}
+</div>
+</div>
     <ExpenseForm onExpenseAdded={handleExpenseAdded} />
 
     <p>Number of expenses: {expenses.length}</p>
 
-    <ExpenseList
+{   deleteError && <p>{deleteError}</p>}
+
+  {expensesLoading ? (
+  <p>Loading expenses...</p>
+) : pageError ? (
+  <p>{pageError}</p>
+) : (
+  <ExpenseList
     expenses={expenses}
     conversions={conversions}
     homeCurrency={homeCurrency}
-    onDelete={handleDelete}/>
+    onDelete={handleDelete}
+  />
+)}
   </div>
 );
 }
