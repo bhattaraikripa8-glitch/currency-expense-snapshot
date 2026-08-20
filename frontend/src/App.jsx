@@ -107,12 +107,34 @@ function App() {
   }
 };
 
+const total = expenses.reduce((sum, expense) => {
+  const conversion = conversions[expense.id];
+
+  if (
+    conversion &&
+    !conversion.loading &&
+    !conversion.error &&
+    conversion.amount !== null
+  ) {
+    return sum + conversion.amount;
+  }
+
+  return sum;
+}, 0);
+
   return (
   <div>
     <h1>Currency & Expense Snapshot</h1>
     <HomeCurrencySelector
     homeCurrency={homeCurrency}
     onChange={setHomeCurrency}/>
+
+    <div>
+  <h2>Total Expenses</h2>
+  <p>
+    {total.toFixed(2)} {homeCurrency}
+  </p>
+</div>
 
     <ExpenseForm onExpenseAdded={handleExpenseAdded} />
 
