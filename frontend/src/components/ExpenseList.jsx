@@ -5,57 +5,68 @@ function ExpenseList({
   onDelete,
 }) {
   if (expenses.length === 0) {
-    return <p>No expenses added yet.</p>;
+    return (
+  <p className="empty-message">
+    No expenses added yet.
+  </p>
+);
   }
 
   return (
-    <div>
-      <h2>Expenses</h2>
+  <div className="expense-list">
+    {expenses.map((expense) => {
+      const conversion = conversions[expense.id];
 
-      {expenses.map((expense) => {
-        const conversion = conversions[expense.id];
+      return (
+        <div className="expense-item" key={expense.id}>
+          <div>
+            <h3 className="expense-title">
+              {expense.title}
+            </h3>
 
-        return (
-          <div key={expense.id}>
-            <h3>{expense.title}</h3>
-
-            <p>
+            <p className="expense-original">
               {expense.amount} {expense.currency}
             </p>
 
             {conversion?.loading && (
-              <p>Converting...</p>
+              <p className="status-message">
+                Converting...
+              </p>
             )}
 
             {!conversion?.loading &&
               conversion?.error && (
-                <p>Conversion unavailable</p>
+                <p className="error-message">
+                  Conversion unavailable
+                </p>
               )}
 
             {!conversion?.loading &&
               !conversion?.error &&
               conversion && (
-                <p>
+                <p className="expense-converted">
                   ≈ {conversion.amount} {homeCurrency}
                 </p>
               )}
 
-            <p>
+            <p className="expense-date">
               {new Date(
                 expense.date
               ).toLocaleDateString()}
             </p>
-
-            <button
-              onClick={() => onDelete(expense.id)}
-            >
-              Delete
-            </button>
           </div>
-        );
-      })}
-    </div>
-  );
+
+          <button
+            className="delete-button"
+            onClick={() => onDelete(expense.id)}
+          >
+            Delete
+          </button>
+        </div>
+      );
+    })}
+  </div>
+);
 }
 
 export default ExpenseList;

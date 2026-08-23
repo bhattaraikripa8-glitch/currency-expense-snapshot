@@ -45,11 +45,13 @@ function ExpenseForm({ onExpenseAdded }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Add Expense</h2>
+  <form className="card expense-form" onSubmit={handleSubmit}>
+    <h2>Add Expense</h2>
 
-      <div>
+    <div className="form-fields">
+      <div className="form-group">
         <label htmlFor="title">Title</label>
+
         <input
           id="title"
           type="text"
@@ -59,8 +61,9 @@ function ExpenseForm({ onExpenseAdded }) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="amount">Amount</label>
+
         <input
           id="amount"
           type="number"
@@ -71,12 +74,15 @@ function ExpenseForm({ onExpenseAdded }) {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="currency">Currency</label>
+
         <select
           id="currency"
           value={currency}
-          onChange={(event) => setCurrency(event.target.value)}
+          onChange={(event) =>
+            setCurrency(event.target.value)
+          }
         >
           <option value="NPR">NPR</option>
           <option value="USD">USD</option>
@@ -85,14 +91,21 @@ function ExpenseForm({ onExpenseAdded }) {
           <option value="GBP">GBP</option>
         </select>
       </div>
+    </div>
 
-      <button type="submit" disabled={loading}>
-        {loading ? "Adding..." : "Add Expense"}
-      </button>
+    <button
+      className="primary-button"
+      type="submit"
+      disabled={loading}
+    >
+      {loading ? "Adding..." : "Add Expense"}
+    </button>
 
-      {error && <p>{error}</p>}
-    </form>
-  );
+    {error && (
+      <p className="error-message">{error}</p>
+    )}
+  </form>
+);
 }
 
 export default ExpenseForm;

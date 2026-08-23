@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import HomeCurrencySelector from "./components/HomeCurrencySelector";
+import "./App.css";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -149,45 +150,67 @@ const totalHasError = expenses.some(
 );
 
   return (
-  <div>
-    <h1>Currency & Expense Snapshot</h1>
-    <HomeCurrencySelector
-    homeCurrency={homeCurrency}
-    onChange={setHomeCurrency}/>
+  <div className="app">
+    <header className="app-header">
+      <h1>Currency & Expense Snapshot</h1>
+      <p>Track expenses across multiple currencies.</p>
+    </header>
 
-    <div>
-  <div>
-  <h2>Total Expenses</h2>
+    <div className="summary-grid">
+      <div className="card">
+        <HomeCurrencySelector
+          homeCurrency={homeCurrency}
+          onChange={setHomeCurrency}
+        />
+      </div>
 
-  {totalLoading ? (
-    <p>Calculating total...</p>
-  ) : totalHasError ? (
-    <p>Total unavailable because a conversion failed.</p>
-  ) : (
-    <p>
-      {total.toFixed(2)} {homeCurrency}
-    </p>
-  )}
-</div>
-</div>
+      <div className="card">
+        <h2>Total Expenses</h2>
+
+        {totalLoading ? (
+          <p className="status-message">Calculating total...</p>
+        ) : totalHasError ? (
+          <p className="error-message">
+            Total unavailable because a conversion failed.
+          </p>
+        ) : (
+          <p className="total-amount">
+            {total.toFixed(2)} {homeCurrency}
+          </p>
+        )}
+      </div>
+    </div>
+
     <ExpenseForm onExpenseAdded={handleExpenseAdded} />
 
-    <p>Number of expenses: {expenses.length}</p>
+    <section className="expenses-section">
+      <div className="expenses-header">
+        <div>
+          <h2>Expenses</h2>
+          <p className="expense-count">
+            {expenses.length} expense
+            {expenses.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+      </div>
 
-{   deleteError && <p>{deleteError}</p>}
+      {deleteError && (
+        <p className="error-message">{deleteError}</p>
+      )}
 
-  {expensesLoading ? (
-  <p>Loading expenses...</p>
-) : pageError ? (
-  <p>{pageError}</p>
-) : (
-  <ExpenseList
-    expenses={expenses}
-    conversions={conversions}
-    homeCurrency={homeCurrency}
-    onDelete={handleDelete}
-  />
-)}
+      {expensesLoading ? (
+        <p className="status-message">Loading expenses...</p>
+      ) : pageError ? (
+        <p className="error-message">{pageError}</p>
+      ) : (
+        <ExpenseList
+          expenses={expenses}
+          conversions={conversions}
+          homeCurrency={homeCurrency}
+          onDelete={handleDelete}
+        />
+      )}
+    </section>
   </div>
 );
 }
