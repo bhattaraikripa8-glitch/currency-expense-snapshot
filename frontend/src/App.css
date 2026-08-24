@@ -6,7 +6,7 @@
 
 .app-header {
   margin-bottom: 30px;
-  background: #dbeafe;
+  background: #96abc6;
   padding: 25px;
   border-radius: 12px;
   text-align: center;
@@ -86,7 +86,7 @@ select:focus {
   padding: 12px 24px;
   border: none;
   border-radius: 20px;
-  background: #16a34a;
+  background: #2563eb;
   color: white;
   cursor: pointer;
   font-weight: bold;
@@ -146,12 +146,12 @@ select:focus {
 
 .expense-converted {
   margin: 4px 0;
-  color: #2563eb;
+  color: green;
 }
 
 .expense-date {
   margin-bottom: 0;
-  color: #6b7280;
+  color: #0b1323;
   font-size: 14px;
 }
 
@@ -165,7 +165,7 @@ select:focus {
 }
 
 .delete-button:hover {
-  background: #fee2e2;
+  background: #ad7b7b;
 }
 
 .error-message {
@@ -173,7 +173,7 @@ select:focus {
 }
 
 .status-message {
-  color: #6b7280;
+  color: #636d82;
 }
 
 .empty-message {
@@ -182,7 +182,7 @@ select:focus {
   border-radius: 12px;
   padding: 30px;
   text-align: center;
-  color: #6b7280;
+  color: #5c6578;
 }
 
 @media (max-width: 700px) {
