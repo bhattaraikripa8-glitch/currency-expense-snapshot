@@ -6,6 +6,10 @@
 
 .app-header {
   margin-bottom: 30px;
+  background: #dbeafe;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
 }
 
 .app-header h1 {
@@ -79,12 +83,13 @@ select:focus {
 }
 
 .primary-button {
-  padding: 10px 18px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 8px;
-  background: #2563eb;
+  border-radius: 20px;
+  background: #16a34a;
   color: white;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .primary-button:hover {
