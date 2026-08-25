@@ -253,6 +253,10 @@ Given more development time, I would consider:
 * Adding editing functionality for existing expenses
 * Improving currency formatting using locale-aware formatting
 
+## AI Assistance Disclosure
+AI tools were used as a supporting resource during the development of this project, mainly for guidance, understanding concepts, debugging, reviewing code, and improving documentation.
+
+
 ## Author
 
 Kripa Bhattarai
